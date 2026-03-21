@@ -1,0 +1,76 @@
+{
+  "users": [
+    {
+      "id": "f071",
+      "email": "thenameet0@gmail.com",
+      "profilePic": "https://wallpapers.com/images/hd/cool-profile-picture-2we7xmn0737hqgtu.jpg",
+      "bio": "a good captions !!",
+      "fullName": "nameet mandwal",
+      "username": "nmt._02",
+      "password": "demo@123"
+    },
+    {
+      "id": "3ac1",
+      "email": "uday@gmail.com",
+      "fullName": "uday malviya",
+      "username": "uday123",
+      "password": "demo@123"
+    }
+  ],
+  "posts": [
+    {
+      "id": "1",
+      "image": "https://w0.peakpx.com/wallpaper/559/832/HD-wallpaper-avengers-endgame-marvel-cinematic-universe-marvel-comics-movie-poster.jpg",
+      "caption": "upcomming marvel movie. releasing on 23 dev 2026",
+      "userId": "f071",
+      "userDetails": {
+        "profilePic": "https://wallpapers.com/images/hd/cool-profile-picture-2we7xmn0737hqgtu.jpg",
+        "username": "nmt._02"
+      },
+      "likes": [],
+      "comments": [
+        {
+          "username": "demo_123",
+          "comment": "exited to watch",
+          "profilePic": "https://wallpapers.com/images/hd/cool-profile-picture-2we7xmn0737hqgtu.jpg",
+          "userId": "2716"
+        }
+      ]
+    },
+    {
+      "id": "702a",
+      "image": "https://i.pinimg.com/736x/49/57/f5/4957f555af7e922870c5326724a3f7b6.jpg",
+      "caption": "paris 🗼",
+      "userId": "f071",
+      "userDetails": {
+        "profilePic": "https://wallpapers.com/images/hd/cool-profile-picture-2we7xmn0737hqgtu.jpg",
+        "username": "nmt._02"
+      },
+      "likes": [],
+      "comments": []
+    },
+    {
+      "id": "6ee0",
+      "image": "https://i.pinimg.com/736x/4d/73/3b/4d733bcd3e01ba2a865fda47a17bc799.jpg",
+      "caption": "japan mount fuji cherry blossoms!!🌸🌸",
+      "userId": "3ac1",
+      "userDetails": {
+        "username": "uday123"
+      },
+      "likes": [],
+      "comments": []
+    },
+    {
+      "id": "318b",
+      "image": "https://i.pinimg.com/1200x/4b/a5/36/4ba5360201342f2ffd6791c236777c94.jpg",
+      "caption": "dftg",
+      "userId": "3ac1",
+      "userDetails": {
+        "username": "uday123"
+      },
+      "likes": [],
+      "comments": []
+    }
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
+}
