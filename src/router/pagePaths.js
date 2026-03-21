@@ -9,5 +9,9 @@ export const pagePaths = {
     messages: "/messages",
     settings: "/settings",
     logout: "/logout",
-    savePost:"/save-post"
+    savePost:"/save-post",
+    viewProfile:"/profile/view/:id",
+
+    //viewProfile
+    viewUserProfile:(userId)=>`/profile/view/${userId}`
 };

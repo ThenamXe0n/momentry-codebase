@@ -16,11 +16,16 @@ import ProtectedRoute from "./router/ProtectedRoute";
 import { useState } from "react";
 import StoryPortal from "./portal/StoryPortal";
 import { stories } from "./data/data";
+import ModalPopup from "./portal/ModalPopup";
+import EditProfileForm from "./component/forms/EditProfileForm";
+import { useSelector } from "react-redux";
+import UserProfileViewer from "./pages/UserProfileViewer";
 
 function App() {
   const [open, setOpen] = useState(false);
   const [storyIndex, setStoryIndex] = useState(0);
-  const loginStatus = localStorage.getItem("loginStatus") === "loggedIn"
+  const loginStatus = localStorage.getItem("loginStatus") === "loggedIn";
+  const {popupOpen,modal} =useSelector((state)=>state.togglers)
 
   return (
     <section className="max-w-md mx-auto shadow-neutral-400 shadow-lg  w-full min-h-screen">
@@ -33,22 +38,37 @@ function App() {
             </ProtectedRoute>
           }
         >
-          <Route index element={<Home setStoryIndex={setStoryIndex} open={open} setOpen={setOpen} />} />
+          <Route
+            index
+            element={
+              <Home
+                setStoryIndex={setStoryIndex}
+                open={open}
+                setOpen={setOpen}
+              />
+            }
+          />
           <Route path={pagePaths.messages} element={<Messages />} />
           <Route path={pagePaths.notifications} element={<Notifications />} />
           <Route path={pagePaths.explore} element={<Explore />} />
           <Route path={pagePaths.post} element={<Post />} />
           <Route path={pagePaths.savePost} element={<SavePost />} />
           <Route path={pagePaths.profile} element={<Profile />} />
+          <Route path={pagePaths.viewProfile} element={<UserProfileViewer />} />
           <Route path={pagePaths.settings} element={<Settings />} />
         </Route>
         <Route path={pagePaths.login} element={<Login />} />
         <Route path={pagePaths.register} element={<Register />} />
       </Routes>
       {open && (
-        <StoryPortal story={stories[storyIndex]} onClose={() => setOpen(false)}>
-        </StoryPortal>
+        <StoryPortal
+          story={stories[storyIndex]}
+          onClose={() => setOpen(false)}
+        ></StoryPortal>
       )}
+     {popupOpen && <ModalPopup>
+        {modal}
+      </ModalPopup>}
     </section>
   );
 }

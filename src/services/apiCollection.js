@@ -47,12 +47,48 @@ export const uploadPostAPI = async (payload) => {
   }
 };
 
-
 export const fetchUserPostByIdAPI = async (userId) => {
   try {
     const response = await axiosInstance.get(
       apiPaths.fetchUserPostById(userId),
     );
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    throw new Error("something went wrong");
+  }
+};
+
+export const fetchAllPostAPI = async () => {
+  try {
+    const response = await axiosInstance.get(apiPaths.post);
+    // const getAllUser = await axiosInstance.get(apiPaths.USER);
+    // console.log("posts", response.data);
+    // console.log("all users", getAllUser.data);
+    return response.data;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
+export const updateUserAPI = async (payload, userId) => {
+  try {
+    const response = await axiosInstance.put(
+      apiPaths.updateUserDetails(userId),
+      payload,
+    );
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    throw new Error("something went wrong");
+  }
+};
+export const fetchUserDetailsbyIdAPI = async (userId) => {
+  try {
+    const response = await axiosInstance.get(
+      apiPaths.userById(userId)
+    );
+    delete response?.data?.password
     return response.data;
   } catch (error) {
     console.log(error);

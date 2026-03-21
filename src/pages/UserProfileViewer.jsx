@@ -2,51 +2,35 @@ import {
   Bookmark,
   Grid3x3,
   Info,
-  LogOut,
+  MessageCircle,
   Upload,
-  UserRoundPen,
+  UserPlus,
 } from "lucide-react";
 import { pagePaths } from "../router/pagePaths";
 import StoryTile from "../component/StoryTile";
 import { useEffect, useState } from "react";
-import { fetchUserPostByIdAPI } from "../services/apiCollection";
-import { Link } from "react-router";
+import { fetchUserDetailsbyIdAPI, fetchUserPostByIdAPI } from "../services/apiCollection";
+import { Link, useParams } from "react-router";
 import { useDispatch } from "react-redux";
-import { handleOpenPopup } from "../features/togglerSlice";
-import EditProfileForm from "../component/forms/EditProfileForm";
-import CommentModal from "../component/modals/CommentModal";
 
 const tabs = [
   { label: "post", icon: <Grid3x3 size={32} /> },
   { label: "save", icon: <Bookmark size={32} /> },
 ];
 
-export default function Profile() {
+export default function UserProfileViewer() {
+  const { id } = useParams();
+  const [userDetails, setUserDetails] = useState();
   const dispatch = useDispatch();
   const [posts, setPosts] = useState([]);
-  const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
+
   const [isActive, setIsActive] = useState("post");
-  function handleLogout() {
-    if (confirm("are you sure to logout ?")) {
-      localStorage.removeItem("loggedInUser");
-      localStorage.removeItem("loginStatus");
-      window.location.replace(pagePaths.login);
-    } else {
-      alert("logout aborted!");
-    }
-
-    //clear storage related to auth
-    //navigate to login page
-    // reload page so state and prop will get reset
-  }
-
-  function handleEditProfileDetails() {
-    dispatch(handleOpenPopup({ modal: <CommentModal/>}));
-  }
 
   async function loadMyPosts() {
     try {
-      const allPost = await fetchUserPostByIdAPI(loggedInUser.id);
+      const allPost = await fetchUserPostByIdAPI(id);
+      const user = await fetchUserDetailsbyIdAPI(id)
+      setUserDetails(user)
       setPosts(allPost);
     } catch (error) {
       setPosts([]);
@@ -77,10 +61,7 @@ export default function Profile() {
     <div className="p-4">
       <div className="flex items-center ">
         <div className="w-fit">
-          <StoryTile
-            profilePic={loggedInUser?.profilePic}
-            displayName={false}
-          />
+          <StoryTile profilePic={userDetails?.profilePic} displayName={false} />
         </div>
         <div className="flex-1  w-full  grid grid-cols-3">
           {stats.map((item, idx) => (
@@ -92,30 +73,35 @@ export default function Profile() {
         </div>
       </div>
       <div>
-        <strong>{loggedInUser?.fullName}</strong>
+        <strong>{userDetails?.fullName}</strong>
         <p className="text-sm font-medium capitalize">
-          {loggedInUser?.bio} || no bio is Available to show ! add a bio
+          {userDetails?.bio} || no bio is Available to show ! add a bio
         </p>
       </div>
-      <div className="mt-3">
+      <div className="my-4">
         <div className="w-full grid grid-cols-2 gap-2">
-          <button onClick={handleEditProfileDetails} className=" text-white  bg-blue-400 rounded-sm gap-2 text-center flex items-center justify-center px-4 ">
-            Edit profile
-            <UserRoundPen size={14} />
+          <button
+            // onClick={handleEditProfileDetails}
+            className=" text-white py-1  bg-blue-400 rounded-sm gap-2 text-center flex items-center justify-center px-4 "
+          >
+            <UserPlus size={14} />
+            Follow
           </button>
           <button
-            onClick={handleLogout}
-            className="capitalize flex items-center justify-center gap-2 text-white bg-red-500 rounded-md text-center w-full px-2 py-1"
+            // onClick={handleEditProfileDetails}
+            className=" text-white py-1  bg-neutral-800 rounded-sm gap-2 text-center flex items-center justify-center px-4 "
           >
-            logout
-            <LogOut size={14} />
+            <MessageCircle size={14} />
+            Message
           </button>
+        
         </div>
       </div>
       {/* // story section  */}
-      <div className="overflow-x-scroll w-full ">
+      {/* <div className="overflow-x-scroll w-full ">
         <div className="flex mt-4 w-fit">
           <StoryTile />
+
           <StoryTile />
           <StoryTile />
           <StoryTile />
@@ -123,7 +109,7 @@ export default function Profile() {
           <StoryTile />
           <StoryTile />
         </div>
-      </div>
+      </div> */}
       {/* //post tab section  */}
       <div className="grid grid-cols-2 mt-4">
         {tabs.map((tab, tabIdx) => (
