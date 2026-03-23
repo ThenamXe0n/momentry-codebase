@@ -58,6 +58,15 @@ export const fetchUserPostByIdAPI = async (userId) => {
     throw new Error("something went wrong");
   }
 };
+export const fetchPostByIdAPI = async (postId) => {
+  try {
+    const response = await axiosInstance.get(apiPaths.fetchPostById(postId));
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    throw new Error("something went wrong");
+  }
+};
 
 export const fetchAllPostAPI = async () => {
   try {
@@ -85,16 +94,32 @@ export const updateUserAPI = async (payload, userId) => {
 };
 export const fetchUserDetailsbyIdAPI = async (userId) => {
   try {
-    const response = await axiosInstance.get(
-      apiPaths.userById(userId)
-    );
-    delete response?.data?.password
+    const response = await axiosInstance.get(apiPaths.userById(userId));
+    delete response?.data?.password;
     return response.data;
   } catch (error) {
     console.log(error);
     throw new Error("something went wrong");
   }
 };
+
+export const postCommentAPI = async (postId, newComment) => {
+  try {
+    // get post details
+    const post = await fetchPostByIdAPI(postId);
+    let newCommentsList = [...post.comments, newComment];
+
+    const response = await axiosInstance.patch(
+      apiPaths.postComment(postId),
+      {comments:newCommentsList},
+    );
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    throw new Error("something went wrong");
+  }
+};
+
 // export const loginUserAPI = async(payload)=>{
 //     try{
 

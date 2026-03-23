@@ -35,7 +35,22 @@
           "username": "demo_123",
           "comment": "exited to watch",
           "profilePic": "https://wallpapers.com/images/hd/cool-profile-picture-2we7xmn0737hqgtu.jpg",
-          "userId": "2716"
+          "userId": "2716",
+          "createAt": "20-03-2024 06:00 PM"
+        },
+        {
+          "comment": "wah wah kya baat hai",
+          "username": "nmt._02",
+          "profilePic": "https://wallpapers.com/images/hd/cool-profile-picture-2we7xmn0737hqgtu.jpg",
+          "userId": "f071",
+          "createAt": "2026-03-23T19:05:26.034Z"
+        },
+        {
+          "comment": "kya baat hai bhai",
+          "username": "uday123",
+          "profilePic": "https://images.tv9hindi.com/wp-content/uploads/2025/04/nana-patekar.jpg",
+          "userId": "3ac1",
+          "createAt": "2026-03-23T19:09:30.997Z"
         }
       ]
     },
@@ -49,7 +64,29 @@
         "username": "nmt._02"
       },
       "likes": [],
-      "comments": []
+      "comments": [
+        {
+          "username": "demo_123",
+          "comment": "excited to watch",
+          "profilePic": "https://wallpapers.com/images/hd/cool-profile-picture-2we7xmn0737hqgtu.jpg",
+          "userId": "2716",
+          "createAt": "20-03-2024 06:00 PM"
+        },
+        {
+          "username": "rahul_dev",
+          "comment": "This looks amazing 🔥",
+          "profilePic": "https://randomuser.me/api/portraits/men/32.jpg",
+          "userId": "2717",
+          "createAt": "21-03-2024 09:15 AM"
+        },
+        {
+          "username": "sneha_art",
+          "comment": "Loved the visuals!",
+          "profilePic": "https://randomuser.me/api/portraits/women/44.jpg",
+          "userId": "2718",
+          "createAt": "21-03-2024 11:30 AM"
+        }
+      ]
     },
     {
       "id": "6ee0",
@@ -60,7 +97,15 @@
         "username": "uday123"
       },
       "likes": [],
-      "comments": []
+      "comments": [
+        {
+          "comment": "very nice",
+          "username": "nmt._02",
+          "profilePic": "https://wallpapers.com/images/hd/cool-profile-picture-2we7xmn0737hqgtu.jpg",
+          "userId": "f071",
+          "createAt": "2026-03-23T19:08:43.639Z"
+        }
+      ]
     },
     {
       "id": "318b",

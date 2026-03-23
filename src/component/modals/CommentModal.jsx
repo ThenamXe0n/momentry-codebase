@@ -1,14 +1,44 @@
 import { Heart, LoaderCircle, Send } from "lucide-react";
-import React from "react";
-import { useSelector } from "react-redux";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { handleRestComments, postCommentAsync } from "../../features/commentSlice";
+import moment from "moment";
+import { useForm } from "react-hook-form";
 
 const CommentModal = () => {
+  const {
+    register,
+    handleSubmit,
+    formState: { isSubmitting },
+  } = useForm();
+  const dispatch = useDispatch();
+  const commentList = useSelector((s) => s.comments.seletedPostcomments || []);
+  const postId = useSelector((s) => s.comments.selectedPostId || []);
   const { popupOpen, isLoading } = useSelector((state) => state.togglers);
   const userDetails = JSON.parse(localStorage.getItem("loggedInUser"));
   console.log(popupOpen);
+
+  async function postComment(data) {
+    const comment = {
+      ...data,
+      username: userDetails.username,
+      profilePic: userDetails.profilePic,
+      userId: userDetails.id,
+      createAt: new Date(),
+    };
+    console.log(comment);
+    dispatch(postCommentAsync({postId,comment}))
+  }
+
+  useEffect(() => {
+    return () => {
+      dispatch(handleRestComments());
+    };
+  }, [dispatch]);
+
   return (
     <div
-      className={`h-11/12 ${popupOpen ? "translate-y-0" : "translate-y-full"} duration-700 relative rounded-tl-3xl text-white rounded-tr-3xl self-end w-full bg-neutral-700`}
+      className={`h-11/12  ${popupOpen ? "translate-y-0 h-11/12 duration-1000 relative rounded-tl-3xl text-white rounded-tr-3xl self-end w-full bg-neutral-700  " : "translate-y-full duration-700 relative rounded-tl-3xl text-white rounded-tr-3xl self-end w-full bg-neutral-700"}  `}
     >
       <div className="h-1 bg-white rounded-full w-4/12 mx-auto"></div>
       <p className="text-center my-2">Comments</p>
@@ -20,28 +50,9 @@ const CommentModal = () => {
         </div>
       ) : (
         <div className="space-y-4 h-11/12">
-          <CommentTile />
-          <CommentTile />
-          <CommentTile />
-          <CommentTile />
-          <CommentTile />
-          <CommentTile />
-          <CommentTile />
-          <CommentTile />
-          <CommentTile />
-          <CommentTile />
-          <CommentTile />
-          <CommentTile />
-          <CommentTile />
-          <CommentTile />
-          <CommentTile />
-          <CommentTile />
-          <CommentTile />
-          <CommentTile />
-          <CommentTile />
-          <CommentTile />
-          <CommentTile />
-          <CommentTile />
+          {commentList.map((comment, commentIdx) => (
+            <CommentTile comment={comment} key={commentIdx} />
+          ))}
         </div>
       )}
       {/* //post a comment */}
@@ -53,15 +64,24 @@ const CommentModal = () => {
             alt={userDetails?.username}
           />
         </div>
-        <div className="ring-2 flex px-3  rounded-xl ring-neutral-300/30 flex-1 ">
+        <form
+          onSubmit={handleSubmit(postComment)}
+          className="ring-2 flex px-3  rounded-xl ring-neutral-300/30 flex-1 "
+        >
           <input
-            className="py-2 outline-0 flex-1 "
+            {...register("comment", { required: true })}
+            className="py-2 outline-0 autofill:bg-transparent flex-1 "
             placeholder="write a comment..."
+            autoComplete="false"
           />
-          <button>
-            <Send color="dodgerblue" />
+          <button disabled={isSubmitting}>
+            {isSubmitting ? (
+              <LoaderCircle className="animate-spin" color="dodgerblue" />
+            ) : (
+              <Send color="dodgerblue" />
+            )}
           </button>
-        </div>
+        </form>
       </div>
     </div>
   );
@@ -72,12 +92,18 @@ export default CommentModal;
 function CommentTile({ comment, liked = true }) {
   return (
     <div className="px-2 flex items-center w-11/12 mx-auto gap-3">
-      <div className="border-2 size-10 rounded-full"></div>
+      <div className="border-2 size-10 rounded-full">
+        <img src={comment?.profilePic} />
+      </div>
       <div className="flex-1">
         <b>
-          username <span className="text-neutral-200/60 font-medium">3h</span>
+          {comment?.username || "username"}{" "}
+          <span className="text-neutral-200/60 font-medium">
+            {moment(comment?.createAt, "hh:mm").fromNow() ||
+              new Date().toString()}
+          </span>
         </b>
-        <p>Jalwa h</p>
+        <p>{comment.comment}</p>
       </div>
       <div className="flex items-center flex-col text-sm">
         {!liked ? (

@@ -1,8 +1,13 @@
 import React from "react";
 import { Link } from "react-router";
 import { pagePaths } from "../router/pagePaths";
+import { useDispatch } from "react-redux";
+import {handleOpenPopup } from "../features/togglerSlice";
+import CommentModal from "./modals/CommentModal";
+import { fetchPostCommentAsync } from "../features/commentSlice";
 
 const PostDisplayCard = React.memo(function ({ post, liked }) {
+  const dispatch = useDispatch()
   // async function handlePostLike() {
   //   console.log("clicked");
   //   try {
@@ -49,6 +54,12 @@ const PostDisplayCard = React.memo(function ({ post, liked }) {
   //     alert("failed to like post!");
   //   }
   // }
+
+  function handleOpenComments(){
+    dispatch(handleOpenPopup({modal:<CommentModal/>}))
+    dispatch(fetchPostCommentAsync(post.id))
+  }
+
 
   console.log(post);
 
@@ -126,7 +137,7 @@ const PostDisplayCard = React.memo(function ({ post, liked }) {
               <span>{post?.likes?.length || 0}</span>
             </div>
             {/* comments */}
-            <div className="flex  items-center">
+            <div onClick={handleOpenComments} className="flex  items-center">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -142,7 +153,7 @@ const PostDisplayCard = React.memo(function ({ post, liked }) {
                 />
               </svg>
 
-              <span>{post?.comment?.length || 0}</span>
+              <span>{post?.comments?.length || 0}</span>
             </div>
           </div>
           {/* save */}

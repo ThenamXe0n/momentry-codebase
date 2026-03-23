@@ -41,7 +41,7 @@ export default function Profile() {
   }
 
   function handleEditProfileDetails() {
-    dispatch(handleOpenPopup({ modal: <CommentModal/>}));
+    dispatch(handleOpenPopup({ modal: <EditProfileForm/>}));
   }
 
   async function loadMyPosts() {

@@ -1,10 +1,15 @@
-import { createSlice } from "@reduxjs/toolkit";
+import {createSlice } from "@reduxjs/toolkit";
+
 
 const initialState = {
   popupOpen: false,
   modal: null,
-  isLoading:false
+  isLoading: false,
+  seletedPostcomments: [],
+  selectedPostId: null,
 };
+
+
 
 const TogglerSlice = createSlice({
   name: "toggler",
@@ -19,10 +24,11 @@ const TogglerSlice = createSlice({
     handleClosePopup: (state) => {
       state.popupOpen = false;
       state.modal = null;
-    },
+    }
   },
+  
 });
 
-export const {handleClosePopup,handleOpenPopup} =  TogglerSlice.actions
+export const { handleClosePopup, handleOpenPopup } = TogglerSlice.actions;
 
 export default TogglerSlice.reducer;
