@@ -3,6 +3,9 @@ import {
   fetchNotificationsForReceiverAPI,
   postNotificationAPI,
   patchNotificationAPI,
+  patchFollowRequestAPI,
+  postFollowAPI,
+  fetchFollowsAPI,
 } from "../services/apiCollection";
 
 const initialState = {
@@ -41,6 +44,26 @@ export const acceptFollowRequestAsync = createAsyncThunk(
   "notification/acceptFollow",
   async ({ notification, accepter }, { rejectWithValue }) => {
     try {
+      if (notification.followRequestId) {
+        try {
+          await patchFollowRequestAPI(notification.followRequestId, {
+            status: "accepted",
+          });
+        } catch {
+          /* request row may have been removed */
+        }
+      }
+      const already = await fetchFollowsAPI({
+        senderId: notification.actorId,
+        receiverId: accepter.id,
+      });
+      if (!already?.length) {
+        await postFollowAPI({
+          senderId: notification.actorId,
+          receiverId: accepter.id,
+          createdAt: new Date().toISOString(),
+        });
+      }
       await patchNotificationAPI(notification.id, { status: "accepted" });
       await postNotificationAPI({
         receiverId: notification.actorId,

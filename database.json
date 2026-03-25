@@ -212,6 +212,28 @@
       "createdAt": "2026-03-25T19:08:55.951Z",
       "postId": "1",
       "postImage": "https://w0.peakpx.com/wallpaper/559/832/HD-wallpaper-avengers-endgame-marvel-cinematic-universe-marvel-comics-movie-poster.jpg"
+    },
+    {
+      "id": "9666",
+      "receiverId": "f071",
+      "actorId": "3ac1",
+      "username": "uday123",
+      "profilePic": "https://images.tv9hindi.com/wp-content/uploads/2025/04/nana-patekar.jpg",
+      "type": "follow_request",
+      "message": "sent you a follow request",
+      "createdAt": "2026-03-25T19:45:38.829Z",
+      "status": "accepted",
+      "followRequestId": "6b77"
+    },
+    {
+      "id": "4c1b",
+      "receiverId": "3ac1",
+      "actorId": "f071",
+      "username": "nmt._02",
+      "profilePic": "https://wallpapers.com/images/hd/cool-profile-picture-2we7xmn0737hqgtu.jpg",
+      "type": "follow_accepted",
+      "message": "accepted your follow request",
+      "createdAt": "2026-03-25T19:46:43.476Z"
     }
   ],
   "savedPosts": [
@@ -278,6 +300,29 @@
         }
       ],
       "savedAt": "2026-03-25T19:04:43.156Z"
+    }
+  ],
+  "followRequests": [
+    {
+      "id": "6b77",
+      "senderId": "3ac1",
+      "receiverId": "f071",
+      "status": "accepted",
+      "createdAt": "2026-03-25T19:45:38.802Z"
+    }
+  ],
+  "follows": [
+    {
+      "id": "a1b2",
+      "senderId": "f071",
+      "receiverId": "3ac1",
+      "createdAt": "2026-03-20T12:00:00.000Z"
+    },
+    {
+      "id": "d831",
+      "senderId": "3ac1",
+      "receiverId": "f071",
+      "createdAt": "2026-03-25T19:46:43.442Z"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"

@@ -10,6 +10,10 @@ const apiPaths = {
   postComment:(postId)=>`/posts/${postId}`,
   savedPosts: "/savedPosts",
   savedPostById: (id) => `/savedPosts/${id}`,
+  followRequests: "/followRequests",
+  followRequestById: (id) => `/followRequests/${id}`,
+  follows: "/follows",
+  followById: (id) => `/follows/${id}`,
 };
 
 export default apiPaths;

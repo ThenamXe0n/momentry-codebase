@@ -17,6 +17,7 @@ import { handleOpenPopup } from "../features/togglerSlice";
 import EditProfileForm from "../component/forms/EditProfileForm";
 import CommentModal from "../component/modals/CommentModal";
 import useSavedPostsHook from "../hooks/useSavedPostsHook";
+import useFollowStatsHook from "../hooks/useFollowStatsHook";
 
 const tabs = [
   { label: "post", icon: <Grid3x3 size={32} /> },
@@ -28,6 +29,7 @@ export default function Profile() {
   const [posts, setPosts] = useState([]);
   const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
   const { savedPosts } = useSavedPostsHook(loggedInUser?.id);
+  const { followersCount, followingCount } = useFollowStatsHook(loggedInUser?.id);
 
   const sortedSaved = [...savedPosts].sort(
     (a, b) => new Date(b.savedAt) - new Date(a.savedAt),
@@ -69,11 +71,11 @@ export default function Profile() {
     },
     {
       label: "followers",
-      count: 0,
+      count: followersCount,
     },
     {
       label: "Following",
-      count: 0,
+      count: followingCount,
     },
   ];
 

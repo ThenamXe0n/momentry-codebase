@@ -198,6 +198,79 @@ export const patchNotificationAPI = async (notificationId, partial) => {
   }
 };
 
+export const fetchFollowRequestsAPI = async (params) => {
+  try {
+    const response = await axiosInstance.get(apiPaths.followRequests, {
+      params,
+    });
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    throw new Error("something went wrong");
+  }
+};
+
+export const postFollowRequestAPI = async (payload) => {
+  try {
+    const response = await axiosInstance.post(apiPaths.followRequests, payload);
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    throw new Error("something went wrong");
+  }
+};
+
+export const patchFollowRequestAPI = async (requestId, partial) => {
+  try {
+    const response = await axiosInstance.patch(
+      apiPaths.followRequestById(requestId),
+      partial,
+    );
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    throw new Error("something went wrong");
+  }
+};
+
+export const deleteFollowRequestAPI = async (requestId) => {
+  try {
+    await axiosInstance.delete(apiPaths.followRequestById(requestId));
+  } catch (error) {
+    console.log(error);
+    throw new Error("something went wrong");
+  }
+};
+
+export const fetchFollowsAPI = async (params) => {
+  try {
+    const response = await axiosInstance.get(apiPaths.follows, { params });
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    throw new Error("something went wrong");
+  }
+};
+
+export const postFollowAPI = async (payload) => {
+  try {
+    const response = await axiosInstance.post(apiPaths.follows, payload);
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    throw new Error("something went wrong");
+  }
+};
+
+export const deleteFollowAPI = async (followId) => {
+  try {
+    await axiosInstance.delete(apiPaths.followById(followId));
+  } catch (error) {
+    console.log(error);
+    throw new Error("something went wrong");
+  }
+};
+
 // export const loginUserAPI = async(payload)=>{
 //     try{
 

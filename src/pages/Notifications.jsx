@@ -79,14 +79,19 @@ export default function Notifications() {
                 {notification.type === "follow_request" && notification.status !== "accepted" && (
                   <button
                     type="button"
-                    onClick={() =>
-                      dispatch(
-                        acceptFollowRequestAsync({
-                          notification: notification,
-                          accepter: loggedInUser,
-                        }),
-                      )
-                    }
+                    onClick={async () => {
+                      try {
+                        await dispatch(
+                          acceptFollowRequestAsync({
+                            notification: notification,
+                            accepter: loggedInUser,
+                          }),
+                        ).unwrap();
+                        dispatch(fetchNotificationsAsync(loggedInUser.id));
+                      } catch (e) {
+                        console.log(e);
+                      }
+                    }}
                     className="mt-2 text-xs font-medium text-white bg-blue-500 hover:bg-blue-600 rounded px-3 py-1.5"
                   >
                     Accept

@@ -12,7 +12,13 @@ import { useEffect, useState } from "react";
 import { fetchUserDetailsbyIdAPI, fetchUserPostByIdAPI } from "../services/apiCollection";
 import { Link, useParams } from "react-router";
 import { useDispatch } from "react-redux";
-import { postNotificationAsync } from "../features/notificationSlice";
+import {
+  cancelFollowRequestAsync,
+  sendFollowRequestAsync,
+  unfollowAsync,
+} from "../features/followSlice";
+import useFollowRelationshipHook from "../hooks/useFollowRelationshipHook";
+import useFollowStatsHook from "../hooks/useFollowStatsHook";
 
 const tabs = [
   { label: "post", icon: <Grid3x3 size={32} /> },
@@ -27,30 +33,48 @@ export default function UserProfileViewer() {
   const sessionUser = JSON.parse(localStorage.getItem("loggedInUser") || "null");
 
   const [isActive, setIsActive] = useState("post");
-  const [followSent, setFollowSent] = useState(false);
+  const [followActionPending, setFollowActionPending] = useState(false);
 
-  function handleFollowRequest() {
-    if (!sessionUser?.id || !id || sessionUser.id === id || followSent) return;
-    dispatch(
-      postNotificationAsync({
-        receiverId: id,
-        actorId: sessionUser.id,
-        username: sessionUser.username,
-        profilePic: sessionUser.profilePic || "",
-        type: "follow_request",
-        message: "sent you a follow request",
-        createdAt: new Date().toISOString(),
-        status: "pending",
-      }),
-    );
-    setFollowSent(true);
+  const { followersCount, followingCount, reloadFollowStats } = useFollowStatsHook(id);
+  const { loading: relLoading, kind, outgoingRequestId, reload: reloadRelation } =
+    useFollowRelationshipHook(id, sessionUser?.id);
+
+  async function handleFollowButtonClick() {
+    if (!sessionUser?.id || !id || kind === "self" || relLoading || followActionPending) return;
+    setFollowActionPending(true);
+    try {
+      if (kind === "none") {
+        await dispatch(
+          sendFollowRequestAsync({
+            senderId: sessionUser.id,
+            receiverId: id,
+            username: sessionUser.username,
+            profilePic: sessionUser.profilePic,
+          }),
+        ).unwrap();
+      } else if (kind === "pending_sent" && outgoingRequestId) {
+        await dispatch(
+          cancelFollowRequestAsync({ requestId: outgoingRequestId }),
+        ).unwrap();
+      } else if (kind === "following") {
+        await dispatch(
+          unfollowAsync({ senderId: sessionUser.id, receiverId: id }),
+        ).unwrap();
+      }
+      await reloadRelation();
+      await reloadFollowStats();
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setFollowActionPending(false);
+    }
   }
 
   async function loadMyPosts() {
     try {
       const allPost = await fetchUserPostByIdAPI(id);
-      const user = await fetchUserDetailsbyIdAPI(id)
-      setUserDetails(user)
+      const user = await fetchUserDetailsbyIdAPI(id);
+      setUserDetails(user);
       setPosts(allPost);
     } catch (error) {
       setPosts([]);
@@ -65,17 +89,29 @@ export default function UserProfileViewer() {
     },
     {
       label: "followers",
-      count: 0,
+      count: followersCount,
     },
     {
       label: "Following",
-      count: 0,
+      count: followingCount,
     },
   ];
 
   useEffect(() => {
     loadMyPosts();
   }, [id]);
+
+  const followButtonLabel = (() => {
+    if (relLoading || followActionPending) return "…";
+    if (kind === "self") return "You";
+    if (kind === "none") return "Follow";
+    if (kind === "pending_sent") return "Requested";
+    if (kind === "following") return "Unfollow";
+    return "Follow";
+  })();
+
+  const followDisabled =
+    kind === "self" || relLoading || followActionPending || !id;
 
   return (
     <div className="p-4">
@@ -102,37 +138,28 @@ export default function UserProfileViewer() {
         <div className="w-full grid grid-cols-2 gap-2">
           <button
             type="button"
-            onClick={handleFollowRequest}
-            disabled={followSent || !id || id === sessionUser?.id}
-            className=" text-white py-1  bg-blue-400 rounded-sm gap-2 text-center flex items-center justify-center px-4 disabled:opacity-50 disabled:cursor-not-allowed "
+            onClick={handleFollowButtonClick}
+            disabled={followDisabled}
+            className={`text-white py-1 rounded-sm gap-2 text-center flex items-center justify-center px-4 disabled:opacity-50 disabled:cursor-not-allowed ${
+              kind === "following"
+                ? "bg-neutral-600"
+                : kind === "pending_sent"
+                  ? "bg-amber-500"
+                  : "bg-blue-400"
+            }`}
           >
             <UserPlus size={14} />
-            {followSent ? "Requested" : "Follow"}
+            {followButtonLabel}
           </button>
           <button
-            // onClick={handleEditProfileDetails}
+            type="button"
             className=" text-white py-1  bg-neutral-800 rounded-sm gap-2 text-center flex items-center justify-center px-4 "
           >
             <MessageCircle size={14} />
             Message
           </button>
-        
         </div>
       </div>
-      {/* // story section  */}
-      {/* <div className="overflow-x-scroll w-full ">
-        <div className="flex mt-4 w-fit">
-          <StoryTile />
-
-          <StoryTile />
-          <StoryTile />
-          <StoryTile />
-          <StoryTile />
-          <StoryTile />
-          <StoryTile />
-        </div>
-      </div> */}
-      {/* //post tab section  */}
       <div className="grid grid-cols-2 mt-4">
         {tabs.map((tab, tabIdx) => (
           <div
@@ -146,7 +173,6 @@ export default function UserProfileViewer() {
           </div>
         ))}
       </div>
-      {/* //post map */}
       {isActive === "post" && (
         <section>
           {posts.length > 0 ? (
