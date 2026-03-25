@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { fetchPostByIdAPI, postCommentAPI } from "../services/apiCollection";
+import { postNotificationAsync } from "./notificationSlice";
 
 const initialState = {
   isLoading: false,
@@ -21,9 +22,24 @@ export const fetchPostCommentAsync = createAsyncThunk(
 
 export const postCommentAsync = createAsyncThunk(
   "comment/post",
-  async ({postId, comment}) => {
+  async ({ postId, comment }, { dispatch }) => {
     try {
       const response = await postCommentAPI(postId, comment);
+      if (response?.userId && response.userId !== comment.userId) {
+        dispatch(
+          postNotificationAsync({
+            receiverId: response.userId,
+            actorId: comment.userId,
+            username: comment.username,
+            profilePic: comment.profilePic || "",
+            type: "comment",
+            message: "commented on your post",
+            createdAt: new Date().toISOString(),
+            postId: response.id,
+            postImage: response.image,
+          }),
+        );
+      }
       return response;
     } catch (error) {
       throw new Error("something went wrong");

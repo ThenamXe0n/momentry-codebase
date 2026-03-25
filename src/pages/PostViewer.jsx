@@ -4,12 +4,14 @@ import { useEffect, useState } from "react";
 import { fetchPostByIdAPI } from "../services/apiCollection";
 import { Link, useParams } from "react-router";
 import PostDisplayCard from "../component/PostDisplayCard";
+import useSavedPostsHook from "../hooks/useSavedPostsHook";
 
 export default function PostViewer() {
   const { id } = useParams();
   const [post, setPost] = useState(null);
   const [hasLoaded, setHasLoaded] = useState(false);
   const sessionUser = JSON.parse(localStorage.getItem("loggedInUser") || "null");
+  const { savedPosts, setSavedPosts } = useSavedPostsHook(sessionUser?.id);
 
   async function loadPost() {
     setPost(null);
@@ -38,6 +40,11 @@ export default function PostViewer() {
     });
   }
 
+  const savedEntryForPost =
+    post == null
+      ? null
+      : savedPosts.find((s) => String(s.postId) === String(post.id)) || null;
+
   return (
     <div className="p-4 w-full">
       {!hasLoaded && (
@@ -48,6 +55,9 @@ export default function PostViewer() {
           post={post}
           setPosts={setPosts}
           liked={(post.likes || []).includes(sessionUser?.id)}
+          saved={!!savedEntryForPost}
+          savedEntry={savedEntryForPost}
+          setSavedPosts={setSavedPosts}
         />
       ) : null}
       {hasLoaded && !post ? (

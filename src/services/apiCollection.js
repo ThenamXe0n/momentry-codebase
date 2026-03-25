@@ -132,6 +132,37 @@ export const likePostAPI = async (postId, likes) => {
   }
 };
 
+export const postSavedPostAPI = async (payload) => {
+  try {
+    const response = await axiosInstance.post(apiPaths.savedPosts, payload);
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    throw new Error("something went wrong");
+  }
+};
+
+export const fetchSavedPostsByUserIdAPI = async (userId) => {
+  try {
+    const response = await axiosInstance.get(apiPaths.savedPosts, {
+      params: { userId },
+    });
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    throw new Error("something went wrong");
+  }
+};
+
+export const deleteSavedPostAPI = async (savedPostId) => {
+  try {
+    await axiosInstance.delete(apiPaths.savedPostById(savedPostId));
+  } catch (error) {
+    console.log(error);
+    throw new Error("something went wrong");
+  }
+};
+
 export const postNotificationAPI = async (payload) => {
   try {
     const response = await axiosInstance.post(apiPaths.notifications, payload);

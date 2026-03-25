@@ -2,6 +2,7 @@ import {
   Bookmark,
   Grid3x3,
   Info,
+  InfoIcon,
   LogOut,
   Upload,
   UserRoundPen,
@@ -15,6 +16,7 @@ import { useDispatch } from "react-redux";
 import { handleOpenPopup } from "../features/togglerSlice";
 import EditProfileForm from "../component/forms/EditProfileForm";
 import CommentModal from "../component/modals/CommentModal";
+import useSavedPostsHook from "../hooks/useSavedPostsHook";
 
 const tabs = [
   { label: "post", icon: <Grid3x3 size={32} /> },
@@ -25,6 +27,12 @@ export default function Profile() {
   const dispatch = useDispatch();
   const [posts, setPosts] = useState([]);
   const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
+  const { savedPosts } = useSavedPostsHook(loggedInUser?.id);
+
+  const sortedSaved = [...savedPosts].sort(
+    (a, b) => new Date(b.savedAt) - new Date(a.savedAt),
+  );
+
   const [isActive, setIsActive] = useState("post");
   function handleLogout() {
     if (confirm("are you sure to logout ?")) {
@@ -41,7 +49,7 @@ export default function Profile() {
   }
 
   function handleEditProfileDetails() {
-    dispatch(handleOpenPopup({ modal: <EditProfileForm/>}));
+    dispatch(handleOpenPopup({ modal: <EditProfileForm /> }));
   }
 
   async function loadMyPosts() {
@@ -144,7 +152,7 @@ export default function Profile() {
           {posts.length > 0 ? (
             <div className="grid grid-cols-3 gap-2">
               {posts.map((post) => (
-                <PostTile key={post?.id} post={post} />
+                <Link to={pagePaths.viewPostById(post?.id)} key={post?.id}><PostTile post={post} /></Link>
               ))}
             </div>
           ) : (
@@ -161,6 +169,34 @@ export default function Profile() {
                 >
                   <Upload />
                   upload post
+                </Link>
+              </div>
+            </div>
+          )}
+        </section>
+      )}
+      {isActive === "save" && (
+        <section>
+          {sortedSaved.length > 0 ? (
+            <div className="grid grid-cols-3 gap-2">
+              {sortedSaved.map((post) => (
+                <Link to={pagePaths.viewPostById(post?.postId)} key={post?.postId}><PostTile post={post} /></Link>
+              ))}
+            </div>
+          ) : (
+            <div className="flex h-[30vh]  items-center justify-center">
+              <div className=" w-11/12 p-5 rounded-md flex items-center bg-neutral-100 justify-center flex-col gap-6">
+                <p className="text-neutral-400 capitalize flex items-center justify-center gap-2">
+                  {" "}
+                  <Info />
+                  No post to display
+                </p>
+                <Link
+                  to={pagePaths.post}
+                  className="px-3 py-1 rounded-md flex gap-2 items-center justify-center bg-blue-600 text-white"
+                >
+                  <InfoIcon />
+                  Explore feed
                 </Link>
               </div>
             </div>

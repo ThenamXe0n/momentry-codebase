@@ -54,6 +54,13 @@
           "profilePic": "https://images.tv9hindi.com/wp-content/uploads/2025/04/nana-patekar.jpg",
           "userId": "3ac1",
           "createAt": "2026-03-23T19:09:30.997Z"
+        },
+        {
+          "comment": "very exited",
+          "username": "uday123",
+          "profilePic": "https://images.tv9hindi.com/wp-content/uploads/2025/04/nana-patekar.jpg",
+          "userId": "3ac1",
+          "createAt": "2026-03-25T19:08:55.913Z"
         }
       ]
     },
@@ -111,6 +118,13 @@
           "profilePic": "https://wallpapers.com/images/hd/cool-profile-picture-2we7xmn0737hqgtu.jpg",
           "userId": "f071",
           "createAt": "2026-03-23T19:08:43.639Z"
+        },
+        {
+          "comment": "very nice",
+          "username": "nmt._02",
+          "profilePic": "https://wallpapers.com/images/hd/cool-profile-picture-2we7xmn0737hqgtu.jpg",
+          "userId": "f071",
+          "createAt": "2026-03-25T19:05:08.800Z"
         }
       ]
     },
@@ -126,6 +140,28 @@
         "f071"
       ],
       "comments": []
+    },
+    {
+      "id": "1512",
+      "image": "https://i.pinimg.com/736x/b2/bc/90/b2bc9066640465513c296ab53c7c5a2a.jpg",
+      "caption": "biker",
+      "userId": "f071",
+      "userDetails": {
+        "profilePic": "https://wallpapers.com/images/hd/cool-profile-picture-2we7xmn0737hqgtu.jpg",
+        "username": "nmt._02"
+      },
+      "likes": [
+        "f071"
+      ],
+      "comments": [
+        {
+          "comment": "bike.jhgjh",
+          "username": "nmt._02",
+          "profilePic": "https://wallpapers.com/images/hd/cool-profile-picture-2we7xmn0737hqgtu.jpg",
+          "userId": "f071",
+          "createAt": "2026-03-25T19:24:40.761Z"
+        }
+      ]
     }
   ],
   "notifications": [
@@ -164,6 +200,84 @@
       "createdAt": "2026-03-25T17:31:59.017Z",
       "postId": "702a",
       "postImage": "https://i.pinimg.com/736x/49/57/f5/4957f555af7e922870c5326724a3f7b6.jpg"
+    },
+    {
+      "id": "7e39",
+      "receiverId": "f071",
+      "actorId": "3ac1",
+      "username": "uday123",
+      "profilePic": "https://images.tv9hindi.com/wp-content/uploads/2025/04/nana-patekar.jpg",
+      "type": "comment",
+      "message": "commented on your post",
+      "createdAt": "2026-03-25T19:08:55.951Z",
+      "postId": "1",
+      "postImage": "https://w0.peakpx.com/wallpaper/559/832/HD-wallpaper-avengers-endgame-marvel-cinematic-universe-marvel-comics-movie-poster.jpg"
+    }
+  ],
+  "savedPosts": [
+    {
+      "id": "f506",
+      "userId": "f071",
+      "postId": "1",
+      "postUserId": "f071",
+      "image": "https://w0.peakpx.com/wallpaper/559/832/HD-wallpaper-avengers-endgame-marvel-cinematic-universe-marvel-comics-movie-poster.jpg",
+      "caption": "upcomming marvel movie. releasing on 23 dev 2026",
+      "userDetails": {
+        "profilePic": "https://wallpapers.com/images/hd/cool-profile-picture-2we7xmn0737hqgtu.jpg",
+        "username": "nmt._02"
+      },
+      "likes": [
+        "f071",
+        "3ac1"
+      ],
+      "comments": [
+        {
+          "username": "demo_123",
+          "comment": "exited to watch",
+          "profilePic": "https://wallpapers.com/images/hd/cool-profile-picture-2we7xmn0737hqgtu.jpg",
+          "userId": "2716",
+          "createAt": "20-03-2024 06:00 PM"
+        },
+        {
+          "comment": "wah wah kya baat hai",
+          "username": "nmt._02",
+          "profilePic": "https://wallpapers.com/images/hd/cool-profile-picture-2we7xmn0737hqgtu.jpg",
+          "userId": "f071",
+          "createAt": "2026-03-23T19:05:26.034Z"
+        },
+        {
+          "comment": "kya baat hai bhai",
+          "username": "uday123",
+          "profilePic": "https://images.tv9hindi.com/wp-content/uploads/2025/04/nana-patekar.jpg",
+          "userId": "3ac1",
+          "createAt": "2026-03-23T19:09:30.997Z"
+        }
+      ],
+      "savedAt": "2026-03-25T18:54:10.219Z"
+    },
+    {
+      "id": "4af6",
+      "userId": "f071",
+      "postId": "6ee0",
+      "postUserId": "3ac1",
+      "image": "https://i.pinimg.com/736x/4d/73/3b/4d733bcd3e01ba2a865fda47a17bc799.jpg",
+      "caption": "japan mount fuji cherry blossoms!!🌸🌸",
+      "userDetails": {
+        "username": "uday123"
+      },
+      "likes": [
+        "f071"
+      ],
+      "comments": [
+        {
+          "comment": "very nice",
+          "username": "nmt._02",
+          "profilePic": "https://wallpapers.com/images/hd/cool-profile-picture-2we7xmn0737hqgtu.jpg",
+          "userId": "f071",
+          "createAt": "2026-03-23T19:08:43.639Z"
+        }
+      ],
+      "savedAt": "2026-03-25T19:04:43.156Z"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo, useState } from "react";
 import { Link } from "react-router";
 import { pagePaths } from "../router/pagePaths";
 import { useDispatch } from "react-redux";
@@ -6,10 +6,54 @@ import { handleOpenPopup } from "../features/togglerSlice";
 import CommentModal from "./modals/CommentModal";
 import { fetchPostCommentAsync } from "../features/commentSlice";
 import { postNotificationAsync } from "../features/notificationSlice";
-import { likePostAPI } from "../services/apiCollection";
+import {
+  deleteSavedPostAPI,
+  likePostAPI,
+  postSavedPostAPI,
+} from "../services/apiCollection";
 
-const PostDisplayCard = React.memo(function ({ post, liked, setPosts }) {
+function getLastTwoRecentComments(comments) {
+  const list = [...(comments || [])];
+  list.sort((a, b) => {
+    const ta = new Date(a.createAt || a.createdAt || 0).getTime();
+    const tb = new Date(b.createAt || b.createdAt || 0).getTime();
+    const na = Number.isNaN(ta) ? 0 : ta;
+    const nb = Number.isNaN(tb) ? 0 : tb;
+    return na - nb;
+  });
+  return list.slice(-2);
+}
+
+function buildSavedPostPayload(post, userId) {
+  return {
+    userId,
+    postId: post.id,
+    postUserId: post.userId,
+    image: post.image,
+    caption: post.caption,
+    userDetails: post.userDetails || {},
+    likes: post.likes || [],
+    comments: post.comments || [],
+    savedAt: new Date().toISOString(),
+  };
+}
+
+const PostDisplayCard = React.memo(function ({
+  post,
+  liked,
+  setPosts,
+  saved,
+  savedEntry,
+  setSavedPosts,
+}) {
   const dispatch = useDispatch();
+  const [savePending, setSavePending] = useState(false);
+
+  const recentCommentsPreview = useMemo(
+    () => getLastTwoRecentComments(post?.comments),
+    [post?.comments],
+  );
+  const totalCommentCount = post?.comments?.length ?? 0;
 
   async function handlePostLike() {
     const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser") || "null");
@@ -59,11 +103,38 @@ const PostDisplayCard = React.memo(function ({ post, liked, setPosts }) {
     dispatch(fetchPostCommentAsync(post.id))
   }
 
+  async function handleSavePost() {
+    const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser") || "null");
+    if (!loggedInUser?.id || !setSavedPosts || savePending) return;
+    setSavePending(true);
+    try {
+      const payload = buildSavedPostPayload(post, loggedInUser.id);
+      const created = await postSavedPostAPI(payload);
+      setSavedPosts((prev) => [...prev, created]);
+    } catch (error) {
+      console.log(error?.message);
+    } finally {
+      setSavePending(false);
+    }
+  }
+
+  async function handleUnsavePost() {
+    if (!savedEntry?.id || !setSavedPosts || savePending) return;
+    setSavePending(true);
+    try {
+      await deleteSavedPostAPI(savedEntry.id);
+      setSavedPosts((prev) => prev.filter((s) => String(s.id) !== String(savedEntry.id)));
+    } catch (error) {
+      console.log(error?.message);
+    } finally {
+      setSavePending(false);
+    }
+  }
 
   console.log(post);
 
   return (
-    <div id={post?.id} className="w-full overflow-hidden h-[75dvh] ">
+    <div id={post?.id} className="w-full overflow-hidden  ">
       {/* //headers  */}
       <div className="flex p-2 justify-between">
         <div className="flex items-start gap-3">
@@ -160,28 +231,68 @@ const PostDisplayCard = React.memo(function ({ post, liked, setPosts }) {
             </div>
           </div>
           {/* save */}
-          <div>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={1.5}
-              stroke="currentColor"
-              className="size-6"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0 1 11.186 0Z"
-              />
-            </svg>
+          <button
+            type="button"
+            onClick={() => (saved ? handleUnsavePost() : handleSavePost())}
+            disabled={savePending || !setSavedPosts}
+            className="bg-transparent border-none p-0 cursor-pointer disabled:opacity-50"
+          >
+            {!saved ? (
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="size-6"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0 1 11.186 0Z"
+                />
+              </svg>
+            ) : (
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                className="size-6"
+              >
+                <path d="M17 3H7c-1.1 0-2 .9-2 2v16l7-3 7 3V5c0-1.1-.9-2-2-2z" />
+              </svg>
+            )}
+          </button>
+        </div>
+        <div className="flex gap-1 flex-wrap items-baseline">
+          <strong>{post?.userDetails?.username}</strong>
+          <p className="text-sm">{post?.caption}</p>
+        </div>
+        <p className="text-xs text-neutral-500 mt-0.5">6 hours ago</p>
+
+        {recentCommentsPreview.length > 0 && (
+          <div className="mt-2 space-y-1">
+            {recentCommentsPreview.map((c, idx) => (
+              <p
+                key={`${c.userId}-${String(c.createAt)}-${idx}`}
+                className="text-sm text-neutral-800 line-clamp-2"
+              >
+                <span className="font-semibold">{c.username}</span>{" "}
+                <span>{c.comment}</span>
+              </p>
+            ))}
           </div>
-        </div>
-        <div className="flex gap-1">
-          <strong>{post?.user?.username}</strong>
-          <p>{post?.caption}</p>
-        </div>
-        <p>6 hours ago</p>
+        )}
+
+        {totalCommentCount > 2 && (
+          <button
+            type="button"
+            onClick={handleOpenComments}
+            className="text-xs text-neutral-500 mt-1.5 p-0 bg-transparent border-none cursor-pointer hover:text-neutral-700"
+          >
+            Show more
+          </button>
+        )}
       </div>
     </div>
   );

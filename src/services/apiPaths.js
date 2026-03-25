@@ -7,7 +7,9 @@ const apiPaths = {
   fetchPostById: (id) => `/posts/${id}`,
   updateUserDetails: (userId) => `/users/${userId}`,
   userById:(userId)=>`/users/${userId}`,
-  postComment:(postId)=>`/posts/${postId}`
+  postComment:(postId)=>`/posts/${postId}`,
+  savedPosts: "/savedPosts",
+  savedPostById: (id) => `/savedPosts/${id}`,
 };
 
 export default apiPaths;

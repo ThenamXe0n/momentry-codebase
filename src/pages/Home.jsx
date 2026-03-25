@@ -2,11 +2,13 @@ import React from "react";
 import { stories } from "../data/data";
 import StoryTile from "../component/StoryTile";
 import usePostHook from "../hooks/usePostHook";
+import useSavedPostsHook from "../hooks/useSavedPostsHook";
 import PostDisplayCard from "../component/PostDisplayCard";
 
 const Home = ({ open, setOpen,setStoryIndex }) => {
    const { loading, posts, setPosts } = usePostHook();
-    const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"))
+    const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser") || "null");
+    const { savedPosts, setSavedPosts } = useSavedPostsHook(loggedInUser?.id);
 
   return (
     <div className="w-full overflow-x-scroll">
@@ -23,14 +25,22 @@ const Home = ({ open, setOpen,setStoryIndex }) => {
         ))}
       </div>
       <div>
-        {posts.map((post) => (
+        {posts.map((post) => {
+          const savedEntry = savedPosts.find(
+            (s) => String(s.postId) === String(post.id),
+          );
+          return (
           <PostDisplayCard
             key={post.id}
             post={post}
             setPosts={setPosts}
-            liked={(post.likes || []).includes(loggedInUser.id)}
+            liked={(post.likes || []).includes(loggedInUser?.id)}
+            saved={!!savedEntry}
+            savedEntry={savedEntry || null}
+            setSavedPosts={setSavedPosts}
           />
-        ))}
+          );
+        })}
       </div>
     </div>
   );

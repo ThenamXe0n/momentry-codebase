@@ -42,7 +42,7 @@ export default function Notifications() {
 
       {!isLoading && !error && list.length === 0 && (
         <div className="rounded-lg bg-neutral-100 p-6 text-center text-neutral-500 text-sm">
-          No notifications yet. Likes, follow requests, and accepted follows will show up here.
+          No notifications yet. Likes, comments, follow requests, and accepted follows will show up here.
         </div>
       )}
 
@@ -62,23 +62,45 @@ export default function Notifications() {
                 className="h-full w-full object-cover"
               />
             </Link>
-            <div className="flex-1 flex justify-between items-start min-w-0">
-              <p className="text-sm leading-snug">
-                <Link
-                  to={pagePaths.viewUserProfile(notification.actorId)}
-                  className="font-semibold"
-                >
-                  {notification.username}
-                </Link>{" "}
-                <span className="text-neutral-700">{notification.message}</span>
-              <p className="text-xs text-neutral-400 mt-1">
-                {moment(notification.createdAt).fromNow()}
-              </p>
-              </p>
-              {notification.type === "like" && notification.postImage && (
+            <div className="flex-1 flex justify-between items-start gap-2 min-w-0">
+              <div className="min-w-0 flex-1">
+                <p className="text-sm leading-snug">
+                  <Link
+                    to={pagePaths.viewUserProfile(notification.actorId)}
+                    className="font-semibold"
+                  >
+                    {notification.username}
+                  </Link>{" "}
+                  <span className="text-neutral-700">{notification.message}</span>
+                </p>
+                <p className="text-xs text-neutral-400 mt-1">
+                  {moment(notification.createdAt).fromNow()}
+                </p>
+                {notification.type === "follow_request" && notification.status !== "accepted" && (
+                  <button
+                    type="button"
+                    onClick={() =>
+                      dispatch(
+                        acceptFollowRequestAsync({
+                          notification: notification,
+                          accepter: loggedInUser,
+                        }),
+                      )
+                    }
+                    className="mt-2 text-xs font-medium text-white bg-blue-500 hover:bg-blue-600 rounded px-3 py-1.5"
+                  >
+                    Accept
+                  </button>
+                )}
+                {notification.type === "follow_request" && notification.status === "accepted" && (
+                  <p className="mt-2 text-xs text-neutral-500">Accepted</p>
+                )}
+              </div>
+              {(notification.type === "like" || notification.type === "comment") &&
+                notification.postImage && (
                 <Link
                   to={pagePaths.viewPostById(notification.postId)}
-                  className="inline-block size-14 rounded overflow-hidden border border-neutral-200"
+                  className="shrink-0 inline-block size-14 rounded overflow-hidden border border-neutral-200"
                 >
                   <img
                     src={notification.postImage}
@@ -86,25 +108,6 @@ export default function Notifications() {
                     className="h-full w-full object-cover"
                   />
                 </Link>
-              )}
-              {notification.type === "follow_request" && notification.status !== "accepted" && (
-                <button
-                  type="button"
-                  onClick={() =>
-                    dispatch(
-                      acceptFollowRequestAsync({
-                        notification: notification,
-                        accepter: loggedInUser,
-                      }),
-                    )
-                  }
-                  className="mt-2 text-xs font-medium text-white bg-blue-500 hover:bg-blue-600 rounded px-3 py-1.5"
-                >
-                  Accept
-                </button>
-              )}
-              {notification.type === "follow_request" && notification.status === "accepted" && (
-                <p className="mt-2 text-xs text-neutral-500">Accepted</p>
               )}
             </div>
           </li>
