@@ -12,6 +12,7 @@ import { useEffect, useState } from "react";
 import { fetchUserDetailsbyIdAPI, fetchUserPostByIdAPI } from "../services/apiCollection";
 import { Link, useParams } from "react-router";
 import { useDispatch } from "react-redux";
+import { postNotificationAsync } from "../features/notificationSlice";
 
 const tabs = [
   { label: "post", icon: <Grid3x3 size={32} /> },
@@ -23,8 +24,27 @@ export default function UserProfileViewer() {
   const [userDetails, setUserDetails] = useState();
   const dispatch = useDispatch();
   const [posts, setPosts] = useState([]);
+  const sessionUser = JSON.parse(localStorage.getItem("loggedInUser") || "null");
 
   const [isActive, setIsActive] = useState("post");
+  const [followSent, setFollowSent] = useState(false);
+
+  function handleFollowRequest() {
+    if (!sessionUser?.id || !id || sessionUser.id === id || followSent) return;
+    dispatch(
+      postNotificationAsync({
+        receiverId: id,
+        actorId: sessionUser.id,
+        username: sessionUser.username,
+        profilePic: sessionUser.profilePic || "",
+        type: "follow_request",
+        message: "sent you a follow request",
+        createdAt: new Date().toISOString(),
+        status: "pending",
+      }),
+    );
+    setFollowSent(true);
+  }
 
   async function loadMyPosts() {
     try {
@@ -55,7 +75,7 @@ export default function UserProfileViewer() {
 
   useEffect(() => {
     loadMyPosts();
-  }, []);
+  }, [id]);
 
   return (
     <div className="p-4">
@@ -81,11 +101,13 @@ export default function UserProfileViewer() {
       <div className="my-4">
         <div className="w-full grid grid-cols-2 gap-2">
           <button
-            // onClick={handleEditProfileDetails}
-            className=" text-white py-1  bg-blue-400 rounded-sm gap-2 text-center flex items-center justify-center px-4 "
+            type="button"
+            onClick={handleFollowRequest}
+            disabled={followSent || !id || id === sessionUser?.id}
+            className=" text-white py-1  bg-blue-400 rounded-sm gap-2 text-center flex items-center justify-center px-4 disabled:opacity-50 disabled:cursor-not-allowed "
           >
             <UserPlus size={14} />
-            Follow
+            {followSent ? "Requested" : "Follow"}
           </button>
           <button
             // onClick={handleEditProfileDetails}
@@ -159,7 +181,10 @@ export default function UserProfileViewer() {
 
 function PostTile({ post }) {
   return (
-    <div className="w-full h-40">
+    <Link
+      to={pagePaths.viewPostById(post.id)}
+      className="w-full h-40 block"
+    >
       <img
         className="h-full w-full object-cover object-center"
         src={
@@ -168,6 +193,6 @@ function PostTile({ post }) {
         }
         alt={post?.caption}
       />
-    </div>
+    </Link>
   );
 }

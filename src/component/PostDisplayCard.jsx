@@ -2,58 +2,57 @@ import React from "react";
 import { Link } from "react-router";
 import { pagePaths } from "../router/pagePaths";
 import { useDispatch } from "react-redux";
-import {handleOpenPopup } from "../features/togglerSlice";
+import { handleOpenPopup } from "../features/togglerSlice";
 import CommentModal from "./modals/CommentModal";
 import { fetchPostCommentAsync } from "../features/commentSlice";
+import { postNotificationAsync } from "../features/notificationSlice";
+import { likePostAPI } from "../services/apiCollection";
 
-const PostDisplayCard = React.memo(function ({ post, liked }) {
-  const dispatch = useDispatch()
-  // async function handlePostLike() {
-  //   console.log("clicked");
-  //   try {
-  //     let newLikes = [...new Set([...post.likes, loggedInUser.id])];
-  //     await likePostAPI(post?.id, newLikes);
-  //     //send notification
-  //     if (post.userId !== loggedInUser.id) {
-  //       let notificationDetails = {
-  //         senderId: id,
-  //         receiverId: post.userId,
-  //         sender: {
-  //           username: username,
-  //           avatar: avatar,
-  //         },
-  //         type: "post",
-  //         createdAt: new Date(),
-  //         message: "liked your post",
-  //         postdetails: {
-  //           image: post.image,
-  //           id: post.id,
-  //         },
-  //       };
-  //       sendNotificationAPI(notificationDetails);
-  //     }
+const PostDisplayCard = React.memo(function ({ post, liked, setPosts }) {
+  const dispatch = useDispatch();
 
-  //     alert("api fetched");
-  //   } catch (error) {
-  //     console.log(error.message);
-  //     alert("failed to like post!");
-  //   }
-  // }
-  // async function handlePostDisLike() {
-  //   console.log("clicked");
-  //   try {
-  //     let newLikes = post.likes;
-  //     let idx = newLikes.indexOf(loggedInUser.id);
-  //     newLikes.splice(idx, 1);
+  async function handlePostLike() {
+    const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser") || "null");
+    if (!loggedInUser?.id) return;
+    try {
+      const newLikes = [...new Set([...(post.likes || []), loggedInUser.id])];
+      await likePostAPI(post.id, newLikes);
+      setPosts?.((prev) =>
+        prev.map((p) => (p.id === post.id ? { ...p, likes: newLikes } : p)),
+      );
+      if (post.userId !== loggedInUser.id) {
+        dispatch(
+          postNotificationAsync({
+            receiverId: post.userId,
+            actorId: loggedInUser.id,
+            username: loggedInUser.username,
+            profilePic: loggedInUser.profilePic || "",
+            type: "like",
+            message: "liked your post",
+            createdAt: new Date().toISOString(),
+            postId: post.id,
+            postImage: post.image,
+          }),
+        );
+      }
+    } catch (error) {
+      console.log(error?.message);
+    }
+  }
 
-  //     let response = await likePostAPI(post?.id, newLikes);
-  //     // console.log(response);
-  //     // alert("api fetched");
-  //   } catch (error) {
-  //     console.log(error.message);
-  //     alert("failed to like post!");
-  //   }
-  // }
+  async function handlePostDislike() {
+    const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser") || "null");
+    if (!loggedInUser?.id) return;
+    try {
+      const newLikes = (post.likes || []).filter((id) => id !== loggedInUser.id);
+      await likePostAPI(post.id, newLikes);
+      setPosts?.((prev) =>
+        prev.map((p) => (p.id === post.id ? { ...p, likes: newLikes } : p)),
+      );
+    } catch (error) {
+      console.log(error?.message);
+    }
+  }
 
   function handleOpenComments(){
     dispatch(handleOpenPopup({modal:<CommentModal/>}))
@@ -107,7 +106,11 @@ const PostDisplayCard = React.memo(function ({ post, liked }) {
         <div className="flex justify-between">
           <div className="flex gap-2">
             {/* like */}
-            <div className="flex items-center cursor-pointer bg-transparent border-none p-0">
+            <button
+              type="button"
+              onClick={() => (liked ? handlePostDislike() : handlePostLike())}
+              className="flex items-center cursor-pointer bg-transparent border-none p-0"
+            >
               {!liked ? (
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -135,7 +138,7 @@ const PostDisplayCard = React.memo(function ({ post, liked }) {
               )}
 
               <span>{post?.likes?.length || 0}</span>
-            </div>
+            </button>
             {/* comments */}
             <div onClick={handleOpenComments} className="flex  items-center">
               <svg

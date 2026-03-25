@@ -29,7 +29,10 @@
         "profilePic": "https://wallpapers.com/images/hd/cool-profile-picture-2we7xmn0737hqgtu.jpg",
         "username": "nmt._02"
       },
-      "likes": [],
+      "likes": [
+        "f071",
+        "3ac1"
+      ],
       "comments": [
         {
           "username": "demo_123",
@@ -63,7 +66,9 @@
         "profilePic": "https://wallpapers.com/images/hd/cool-profile-picture-2we7xmn0737hqgtu.jpg",
         "username": "nmt._02"
       },
-      "likes": [],
+      "likes": [
+        "3ac1"
+      ],
       "comments": [
         {
           "username": "demo_123",
@@ -96,7 +101,9 @@
       "userDetails": {
         "username": "uday123"
       },
-      "likes": [],
+      "likes": [
+        "f071"
+      ],
       "comments": [
         {
           "comment": "very nice",
@@ -115,8 +122,48 @@
       "userDetails": {
         "username": "uday123"
       },
-      "likes": [],
+      "likes": [
+        "f071"
+      ],
       "comments": []
+    }
+  ],
+  "notifications": [
+    {
+      "id": "9bf4",
+      "recipientId": "3ac1",
+      "actorId": "f071",
+      "actorUsername": "nmt._02",
+      "actorProfilePic": "https://wallpapers.com/images/hd/cool-profile-picture-2we7xmn0737hqgtu.jpg",
+      "type": "like",
+      "message": "liked your post",
+      "createdAt": "2026-03-25T17:24:13.978Z",
+      "postId": "6ee0",
+      "postImage": "https://i.pinimg.com/736x/4d/73/3b/4d733bcd3e01ba2a865fda47a17bc799.jpg"
+    },
+    {
+      "id": "55a3",
+      "receiverId": "3ac1",
+      "actorId": "f071",
+      "username": "nmt._02",
+      "profilePic": "https://wallpapers.com/images/hd/cool-profile-picture-2we7xmn0737hqgtu.jpg",
+      "type": "like",
+      "message": "liked your post",
+      "createdAt": "2026-03-25T17:31:25.762Z",
+      "postId": "318b",
+      "postImage": "https://i.pinimg.com/1200x/4b/a5/36/4ba5360201342f2ffd6791c236777c94.jpg"
+    },
+    {
+      "id": "9db9",
+      "receiverId": "f071",
+      "actorId": "3ac1",
+      "username": "uday123",
+      "profilePic": "https://images.tv9hindi.com/wp-content/uploads/2025/04/nana-patekar.jpg",
+      "type": "like",
+      "message": "liked your post",
+      "createdAt": "2026-03-25T17:31:59.017Z",
+      "postId": "702a",
+      "postImage": "https://i.pinimg.com/736x/49/57/f5/4957f555af7e922870c5326724a3f7b6.jpg"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"

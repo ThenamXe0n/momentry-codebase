@@ -4,6 +4,7 @@ export const pagePaths = {
     register: "/register",
     profile: "/profile",
     post: "/post",
+    viewPost: "/post/view/:id",
     explore: "/explore",
     notifications: "/notifications",
     messages: "/messages",
@@ -13,5 +14,7 @@ export const pagePaths = {
     viewProfile:"/profile/view/:id",
 
     //viewProfile
-    viewUserProfile:(userId)=>`/profile/view/${userId}`
+    viewUserProfile:(userId)=>`/profile/view/${userId}`,
+
+    viewPostById: (postId) => `/post/view/${postId}`,
 };

@@ -5,7 +5,7 @@ import usePostHook from "../hooks/usePostHook";
 import PostDisplayCard from "../component/PostDisplayCard";
 
 const Home = ({ open, setOpen,setStoryIndex }) => {
-   const { loading, posts } = usePostHook();
+   const { loading, posts, setPosts } = usePostHook();
     const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"))
 
   return (
@@ -27,7 +27,8 @@ const Home = ({ open, setOpen,setStoryIndex }) => {
           <PostDisplayCard
             key={post.id}
             post={post}
-            liked={post.likes.includes(loggedInUser.id)}
+            setPosts={setPosts}
+            liked={(post.likes || []).includes(loggedInUser.id)}
           />
         ))}
       </div>

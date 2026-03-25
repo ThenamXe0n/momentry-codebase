@@ -120,6 +120,53 @@ export const postCommentAPI = async (postId, newComment) => {
   }
 };
 
+export const likePostAPI = async (postId, likes) => {
+  try {
+    const response = await axiosInstance.patch(apiPaths.fetchPostById(postId), {
+      likes,
+    });
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    throw new Error("something went wrong");
+  }
+};
+
+export const postNotificationAPI = async (payload) => {
+  try {
+    const response = await axiosInstance.post(apiPaths.notifications, payload);
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    throw new Error("something went wrong");
+  }
+};
+
+export const fetchNotificationsForReceiverAPI = async (receiverId) => {
+  try {
+    const response = await axiosInstance.get(apiPaths.notifications, {
+      params: { receiverId },
+    });
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    throw new Error("something went wrong");
+  }
+};
+
+export const patchNotificationAPI = async (notificationId, partial) => {
+  try {
+    const response = await axiosInstance.patch(
+      apiPaths.notificationById(notificationId),
+      partial,
+    );
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    throw new Error("something went wrong");
+  }
+};
+
 // export const loginUserAPI = async(payload)=>{
 //     try{
 

@@ -20,6 +20,7 @@ import ModalPopup from "./portal/ModalPopup";
 import EditProfileForm from "./component/forms/EditProfileForm";
 import { useSelector } from "react-redux";
 import UserProfileViewer from "./pages/UserProfileViewer";
+import PostViewer from "./pages/PostViewer";
 
 function App() {
   const [open, setOpen] = useState(false);
@@ -51,6 +52,7 @@ function App() {
           <Route path={pagePaths.messages} element={<Messages />} />
           <Route path={pagePaths.notifications} element={<Notifications />} />
           <Route path={pagePaths.explore} element={<Explore />} />
+          <Route path={pagePaths.viewPost} element={<PostViewer />} />
           <Route path={pagePaths.post} element={<Post />} />
           <Route path={pagePaths.savePost} element={<SavePost />} />
           <Route path={pagePaths.profile} element={<Profile />} />
