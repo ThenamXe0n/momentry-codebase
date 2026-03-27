@@ -1,7 +1,6 @@
 import { Outlet } from "react-router";
 import NavBar from "../component/NavBar";
 import { Footer } from "../component/Footer";
-import StoryPortal from "../portal/StoryPortal";
 
 const AccoutLayout = () => {
  

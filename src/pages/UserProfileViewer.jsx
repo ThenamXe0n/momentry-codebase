@@ -151,13 +151,24 @@ export default function UserProfileViewer() {
             <UserPlus size={14} />
             {followButtonLabel}
           </button>
-          <button
-            type="button"
-            className=" text-white py-1  bg-neutral-800 rounded-sm gap-2 text-center flex items-center justify-center px-4 "
-          >
-            <MessageCircle size={14} />
-            Message
-          </button>
+          {id !== sessionUser?.id ? (
+            <Link
+              to={pagePaths.messageChatWith(id)}
+              className="text-white py-1 bg-neutral-800 rounded-sm gap-2 text-center flex items-center justify-center px-4"
+            >
+              <MessageCircle size={14} />
+              Message
+            </Link>
+          ) : (
+            <button
+              type="button"
+              disabled
+              className="text-white py-1 bg-neutral-800 rounded-sm gap-2 text-center flex items-center justify-center px-4 opacity-50 cursor-not-allowed"
+            >
+              <MessageCircle size={14} />
+              Message
+            </button>
+          )}
         </div>
       </div>
       <div className="grid grid-cols-2 mt-4">

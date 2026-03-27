@@ -14,6 +14,10 @@ const apiPaths = {
   followRequestById: (id) => `/followRequests/${id}`,
   follows: "/follows",
   followById: (id) => `/follows/${id}`,
+  stories: "/stories",
+  storyById: (id) => `/stories/${id}`,
+  messages: "/messages",
+  messageById: (id) => `/messages/${id}`,
 };
 
 export default apiPaths;

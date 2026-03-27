@@ -43,7 +43,7 @@ const StoryPortal = ({ story, duration = 4000, onClose }) => {
         {/* Story Content */}
         <div className="w-full h-full flex items-center justify-center ">
           <img
-            src={story?.content}
+            src={story?.content || story?.image}
             alt="story content"
             className=" h-full object-cover rounded-lg"
           />

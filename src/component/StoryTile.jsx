@@ -28,7 +28,7 @@ const StoryTile = ({
       )}
       {displayName && (
         <p className="truncate max-w-24 text-xs ">
-          {story?.user.name || "nameet mandwal"}
+          {story?.user?.name || story?.userDetails?.username || "Story"}
         </p>
       )}
     </div>

@@ -234,6 +234,18 @@
       "type": "follow_accepted",
       "message": "accepted your follow request",
       "createdAt": "2026-03-25T19:46:43.476Z"
+    },
+    {
+      "id": "f2db",
+      "receiverId": "3ac1",
+      "actorId": "f071",
+      "username": "nmt._02",
+      "profilePic": "https://wallpapers.com/images/hd/cool-profile-picture-2we7xmn0737hqgtu.jpg",
+      "type": "follow_request",
+      "message": "sent you a follow request",
+      "createdAt": "2026-03-26T13:28:05.748Z",
+      "status": "accepted",
+      "followRequestId": "7d03"
     }
   ],
   "savedPosts": [
@@ -302,6 +314,32 @@
       "savedAt": "2026-03-25T19:04:43.156Z"
     }
   ],
+  "stories": [
+    {
+      "id": "st01",
+      "userId": "f071",
+      "image": "https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d?auto=format&fit=crop&w=800&q=80",
+      "caption": "",
+      "userDetails": {
+        "username": "nmt._02",
+        "profilePic": "https://wallpapers.com/images/hd/cool-profile-picture-2we7xmn0737hqgtu.jpg"
+      },
+      "duration": 5000,
+      "createdAt": "2026-03-26T15:00:00.000Z"
+    },
+    {
+      "id": "5aa9",
+      "image": "https://i.pinimg.com/736x/de/5a/3e/de5a3eee399dd05d443048b3b3c44d1d.jpg",
+      "caption": "japan mount fuji cherry blossoms!!🌸🌸",
+      "duration": 4000,
+      "userId": "f071",
+      "userDetails": {
+        "profilePic": "https://wallpapers.com/images/hd/cool-profile-picture-2we7xmn0737hqgtu.jpg",
+        "username": "nmt._02"
+      },
+      "createdAt": "2026-03-26T13:37:01.137Z"
+    }
+  ],
   "followRequests": [
     {
       "id": "6b77",
@@ -309,20 +347,78 @@
       "receiverId": "f071",
       "status": "accepted",
       "createdAt": "2026-03-25T19:45:38.802Z"
+    },
+    {
+      "id": "7d03",
+      "senderId": "f071",
+      "receiverId": "3ac1",
+      "status": "accepted",
+      "createdAt": "2026-03-26T13:28:05.727Z"
     }
   ],
   "follows": [
-    {
-      "id": "a1b2",
-      "senderId": "f071",
-      "receiverId": "3ac1",
-      "createdAt": "2026-03-20T12:00:00.000Z"
-    },
     {
       "id": "d831",
       "senderId": "3ac1",
       "receiverId": "f071",
       "createdAt": "2026-03-25T19:46:43.442Z"
+    },
+    {
+      "id": "46f9",
+      "senderId": "f071",
+      "receiverId": "3ac1",
+      "createdAt": "2026-03-27T06:20:43.555Z"
+    }
+  ],
+  "messages": [
+    {
+      "id": "msg1",
+      "senderId": "f071",
+      "receiverId": "3ac1",
+      "text": "Hey! Nice posts today.",
+      "createdAt": "2026-03-26T16:00:00.000Z"
+    },
+    {
+      "id": "msg2",
+      "senderId": "3ac1",
+      "receiverId": "f071",
+      "text": "Thanks! Same to you.",
+      "createdAt": "2026-03-26T16:02:00.000Z"
+    },
+    {
+      "id": "4aad",
+      "senderId": "f071",
+      "receiverId": "3ac1",
+      "text": "hellow",
+      "createdAt": "2026-03-27T06:20:23.239Z"
+    },
+    {
+      "id": "9d45",
+      "senderId": "f071",
+      "receiverId": "3ac1",
+      "text": "kya baat h baat kya h",
+      "createdAt": "2026-03-27T06:21:03.463Z"
+    },
+    {
+      "id": "2f82",
+      "senderId": "3ac1",
+      "receiverId": "f071",
+      "text": "ok",
+      "createdAt": "2026-03-27T06:21:14.863Z"
+    },
+    {
+      "id": "30b2",
+      "senderId": "3ac1",
+      "receiverId": "f071",
+      "text": "mngvhjhjhjg",
+      "createdAt": "2026-03-27T06:28:23.013Z"
+    },
+    {
+      "id": "810a",
+      "senderId": "f071",
+      "receiverId": "3ac1",
+      "text": "jhgjhghjgjh",
+      "createdAt": "2026-03-27T06:29:44.805Z"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"

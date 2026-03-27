@@ -1,16 +1,66 @@
-# React + Vite
+# Momentry
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**Momentry** is an Instagram-style social feed built with **React**, **Vite**, **Tailwind CSS**, and **Redux**. Users can sign up, browse a home feed, publish posts, like and comment, save posts, manage follow requests and follows, receive notifications, and share **stories** from people they follow.
 
-Currently, two official plugins are available:
+The app talks to a local **[json-server](https://github.com/typicode/json-server)** REST API backed by `database.json` (no separate backend server code in this repo).
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Prerequisites
 
-## React Compiler
+- [Node.js](https://nodejs.org/) (LTS recommended)
+- npm (comes with Node.js)
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Getting started
 
-## Expanding the ESLint configuration
+1. **Install dependencies**
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+   ```bash
+   npm install
+   ```
+
+2. **Start the API** (required for login, posts, stories, and all data)
+
+   ```bash
+   npm run server
+   ```
+
+   This runs json-server on **http://localhost:8000** and watches `database.json` for changes.
+
+3. **Start the web app** (in a second terminal)
+
+   ```bash
+   npm run dev
+   ```
+
+   Vite prints a local URL (typically **http://localhost:5173**). Open it in your browser.
+
+4. **Optional:** build for production and preview the static output.
+
+   ```bash
+   npm run build
+   npm run preview
+   ```
+
+## Configuration
+
+- **API base URL:** `http://localhost:8000` (see `src/services/axiosInstance.js`). Change it if you run json-server on another host or port.
+- **JSON server:** port and file are set in `package.json` under the `server` script (`--port 8000`, `database.json`).
+
+## Scripts
+
+| Script        | Description                                      |
+| ------------- | ------------------------------------------------ |
+| `npm run dev` | Start Vite dev server with HMR                   |
+| `npm run build` | Production build                               |
+| `npm run preview` | Serve the production build locally           |
+| `npm run server` | Start json-server API (`database.json`)      |
+| `npm run lint` | Run ESLint                                     |
+
+## API documentation
+
+See **[apidocumentation.md](./apidocumentation.md)** for routes, query parameters, and example payloads used by this project.
+
+## Tech stack
+
+- React 19, React Router 7, Redux Toolkit, React Hook Form  
+- Vite 7, Tailwind CSS 4  
+- Axios, json-server  

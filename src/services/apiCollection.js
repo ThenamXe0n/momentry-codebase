@@ -271,6 +271,110 @@ export const deleteFollowAPI = async (followId) => {
   }
 };
 
+function pickLatestStoryPerUser(stories) {
+  const byUser = new Map();
+  for (const s of stories || []) {
+    const uid = String(s.userId);
+    const prev = byUser.get(uid);
+    const ta = new Date(s.createdAt || 0).getTime();
+    const tb = prev ? new Date(prev.createdAt || 0).getTime() : -Infinity;
+    if (!prev || ta >= tb) byUser.set(uid, s);
+  }
+  return Array.from(byUser.values()).sort(
+    (a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0),
+  );
+}
+
+export const uploadStoryAPI = async (payload) => {
+  try {
+    const response = await axiosInstance.post(apiPaths.stories, payload);
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    throw new Error("something went wrong");
+  }
+};
+
+export const fetchAllStoriesAPI = async () => {
+  try {
+    const response = await axiosInstance.get(apiPaths.stories);
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    throw new Error("something went wrong");
+  }
+};
+
+export const fetchStoriesFeedForUserAPI = async (loggedInUserId) => {
+  try {
+    if (!loggedInUserId) return [];
+    const follows = await fetchFollowsAPI({ senderId: loggedInUserId });
+    const followingIds = new Set(
+      (follows || []).map((f) => String(f.receiverId)),
+    );
+    if (followingIds.size === 0) return [];
+    const all = await fetchAllStoriesAPI();
+    const filtered = (all || []).filter((s) =>
+      followingIds.has(String(s.userId)),
+    );
+    return pickLatestStoryPerUser(filtered);
+  } catch (error) {
+    console.log(error);
+    throw new Error("something went wrong");
+  }
+};
+
+export const fetchAllMessagesAPI = async () => {
+  try {
+    const response = await axiosInstance.get(apiPaths.messages);
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    throw new Error("something went wrong");
+  }
+};
+
+export const fetchMessagesForUserAPI = async (userId) => {
+  try {
+    const all = await fetchAllMessagesAPI();
+    return (all || []).filter(
+      (m) => m.senderId === userId || m.receiverId === userId,
+    );
+  } catch (error) {
+    console.log(error);
+    throw new Error("something went wrong");
+  }
+};
+
+export const fetchMessagesBetweenUsersAPI = async (userId, peerId) => {
+  try {
+    const all = await fetchAllMessagesAPI();
+    return (all || [])
+      .filter(
+        (m) =>
+          (m.senderId === userId && m.receiverId === peerId) ||
+          (m.senderId === peerId && m.receiverId === userId),
+      )
+      .sort(
+        (a, b) =>
+          new Date(a.createdAt || 0) - new Date(b.createdAt || 0),
+      );
+  } catch (error) {
+    console.log(error);
+    throw new Error("something went wrong");
+  }
+};
+
+export const postMessageAPI = async (payload) => {
+  try {
+    const response = await axiosInstance.post(apiPaths.messages, payload);
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    throw new Error("something went wrong");
+  }
+};
+
 // export const loginUserAPI = async(payload)=>{
 //     try{
 
