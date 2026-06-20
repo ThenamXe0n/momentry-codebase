@@ -5,7 +5,9 @@
 >### folder structure we are following is feature based (modules)
 >### route connection and middleware and express server creation done in app.js
 >### server is listened in server.js file our main file
-
+>### .env are imported in config//env.js and from there we use in all over application
+direct process.env ko application m use nahi karenge hum , hum use karenge ENV. and ye ENV variable config/env se import hoga 
+isse saare env ek file m imported rahenge
 > Flow of any modules or featur
 
 ```
