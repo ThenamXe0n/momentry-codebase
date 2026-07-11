@@ -1,13 +1,12 @@
-import axios from "axios";
 import { pagePaths } from "../router/pagePaths";
 import apiPaths from "./apiPaths";
 import axiosInstance from "./axiosInstance";
 
-const AUTH_BASE_URL = "http://localhost:5000/api/auth";
+
 
 export const registerUserAPI = async (payload) => {
   try {
-    const response = await axios.post(`${AUTH_BASE_URL}/register`, payload);
+    const response = await axiosInstance.post(`/api/auth/register`, payload);
     return {
       ...response.data,
       status: response.data.success,
@@ -21,7 +20,7 @@ export const registerUserAPI = async (payload) => {
 
 export const loginUserAPI = async (payload) => {
   try {
-    const response = await axios.post(`${AUTH_BASE_URL}/login`, payload);
+    const response = await axiosInstance.post(`/api/auth/login`, payload);
     const { success, data } = response.data;
 
     if (!success || !data) {
