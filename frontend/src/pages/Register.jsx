@@ -1,5 +1,7 @@
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router";
+import { Eye, EyeOff } from "lucide-react";
 import { pagePaths } from "../router/pagePaths";
 import { registerUserAPI } from "../services/apiCollection";
 
@@ -9,6 +11,7 @@ export default function Register() {
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm();
+  const [showPassword, setShowPassword] = useState(false);
 
   const onSubmit = async (data) => {
     console.log("Register:", data);
@@ -101,19 +104,33 @@ export default function Register() {
             </div>
 
             <div>
-              <input
-                type="password"
-                placeholder="Password"
-                className="w-full px-3 py-2.5 text-sm bg-neutral-50 border border-neutral-200 rounded-md outline-none placeholder:text-neutral-400 focus:border-neutral-400 focus:ring-0"
-                aria-invalid={errors.password ? "true" : "false"}
-                {...register("password", {
-                  required: "Password is required",
-                  minLength: {
-                    value: 6,
-                    message: "Password must be at least 6 characters",
-                  },
-                })}
-              />
+              <div className="relative">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Password"
+                  className="w-full pl-3 pr-10 py-2.5 text-sm bg-neutral-50 border border-neutral-200 rounded-md outline-none placeholder:text-neutral-400 focus:border-neutral-400 focus:ring-0"
+                  aria-invalid={errors.password ? "true" : "false"}
+                  {...register("password", {
+                    required: "Password is required",
+                    minLength: {
+                      value: 6,
+                      message: "Password must be at least 6 characters",
+                    },
+                  })}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword((prev) => !prev)}
+                  className="absolute inset-y-0 right-0 flex items-center pr-3 text-neutral-500 hover:text-neutral-700 cursor-pointer"
+                  aria-label={showPassword ? "Hide password" : "Show password"}
+                >
+                  {showPassword ? (
+                    <EyeOff className="h-4.5 w-4.5" />
+                  ) : (
+                    <Eye className="h-4.5 w-4.5" />
+                  )}
+                </button>
+              </div>
               {errors.password && (
                 <p className="mt-1 text-xs text-red-500" role="alert">
                   {errors.password.message}

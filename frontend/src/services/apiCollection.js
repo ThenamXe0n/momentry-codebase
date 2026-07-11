@@ -1,42 +1,46 @@
+import axios from "axios";
 import { pagePaths } from "../router/pagePaths";
 import apiPaths from "./apiPaths";
 import axiosInstance from "./axiosInstance";
 
+const AUTH_BASE_URL = "http://localhost:5000/api/auth";
+
 export const registerUserAPI = async (payload) => {
   try {
-    const response = await axiosInstance.post("/users", payload);
-    return response.data;
+    const response = await axios.post(`${AUTH_BASE_URL}/register`, payload);
+    return {
+      ...response.data,
+      status: response.data.success,
+    };
   } catch (error) {
-    console.log(error);
-    throw new Error("something went wrong");
+    console.error("Register API error:", error);
+    const errMsg = error.response?.data?.message || "Registration failed";
+    throw new Error(errMsg);
   }
 };
 
 export const loginUserAPI = async (payload) => {
   try {
-    const isUserExist = await axiosInstance.get(
-      `/users?email=${payload.email}`,
-    );
-    if (isUserExist.data.length <= 0) {
-      alert("no such user found!");
-      return;
-    }
-    //password checks
-    console.log("check", isUserExist.data[0].password !== payload.password);
-    if (isUserExist?.data[0].password !== payload.password) {
-      alert("invalid credentials!!");
+    const response = await axios.post(`${AUTH_BASE_URL}/login`, payload);
+    const { success, data } = response.data;
+
+    if (!success || !data) {
+      alert("Login failed");
       return;
     }
 
-    //passed all checkins
-    localStorage.setItem("loggedInUser", JSON.stringify(isUserExist.data[0]));
+    localStorage.setItem("authToken", data.token);
+    localStorage.setItem("loggedInUser", JSON.stringify(data.user));
     localStorage.setItem("loginStatus", "loggedIn");
     window.location.replace(pagePaths.home);
   } catch (error) {
-    alert(error);
-    throw new Error("something went wrong");
+    console.error("Login API error:", error);
+    const errMsg = error.response?.data?.message || "Invalid credentials!!";
+    alert(errMsg);
+    throw new Error(errMsg);
   }
 };
+
 export const uploadPostAPI = async (payload) => {
   try {
     const response = await axiosInstance.post(apiPaths.post, payload);

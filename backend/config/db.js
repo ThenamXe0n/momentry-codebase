@@ -1,11 +1,12 @@
 import mongoose from "mongoose";
+import { ENV } from "./env.js";
 
 const connectDB = async () => {
   try {
     mongoose.set("strictQuery", true);
 
-    const conn = await mongoose.connect(process.env.MONGO_URI, {
-      dbName: process.env.DB_NAME,
+    const conn = await mongoose.connect(ENV.MONGO_URI, {
+      dbName: ENV.DB_NAME,
 
       serverSelectionTimeoutMS: 5000,
       socketTimeoutMS: 45000,

@@ -1,5 +1,7 @@
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router";
+import { Eye, EyeOff } from "lucide-react";
 import { pagePaths } from "../router/pagePaths";
 import { loginUserAPI } from "../services/apiCollection";
 
@@ -10,6 +12,7 @@ export default function Login() {
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm();
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleLogin = async (data) => {
     console.log("Login:", data);
@@ -52,15 +55,29 @@ export default function Login() {
             </div>
 
             <div>
-              <input
-                type="password"
-                placeholder="Password"
-                className="w-full px-3 py-2.5 text-sm bg-neutral-50 border border-neutral-200 rounded-md outline-none placeholder:text-neutral-400 focus:border-neutral-400 focus:ring-0"
-                aria-invalid={errors.password ? "true" : "false"}
-                {...register("password", {
-                  required: "This field is required",
-                })}
-              />
+              <div className="relative">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Password"
+                  className="w-full pl-3 pr-10 py-2.5 text-sm bg-neutral-50 border border-neutral-200 rounded-md outline-none placeholder:text-neutral-400 focus:border-neutral-400 focus:ring-0"
+                  aria-invalid={errors.password ? "true" : "false"}
+                  {...register("password", {
+                    required: "This field is required",
+                  })}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword((prev) => !prev)}
+                  className="absolute inset-y-0 right-0 flex items-center pr-3 text-neutral-500 hover:text-neutral-700 cursor-pointer"
+                  aria-label={showPassword ? "Hide password" : "Show password"}
+                >
+                  {showPassword ? (
+                    <EyeOff className="h-4.5 w-4.5" />
+                  ) : (
+                    <Eye className="h-4.5 w-4.5" />
+                  )}
+                </button>
+              </div>
               {errors.password && (
                 <p className="mt-1 text-xs text-red-500" role="alert">
                   {errors.password.message}
@@ -71,12 +88,13 @@ export default function Login() {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="w-full py-2 mt-1 text-sm font-semibold text-white bg-[#0095f6] hover:bg-[#1877f2] disabled:opacity-60 disabled:pointer-events-none rounded-lg transition-colors"
+              className="w-full py-2 mt-1 text-sm font-semibold text-white bg-[#0095f6] hover:bg-[#1877f2] disabled:opacity-60 disabled:pointer-events-none rounded-lg transition-colors cursor-pointer"
             >
               {isSubmitting ? "Logging in…" : "Log in"}
             </button>
           </form>
         </div>
+
 
         {/* Sign up link */}
         <div className="w-full py-4 bg-white border border-neutral-200 rounded-lg text-center">
